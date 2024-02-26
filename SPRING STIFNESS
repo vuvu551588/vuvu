@@ -1,0 +1,120 @@
+% Given information
+AB = 0.2; % meters
+OE = 0.25; % meters
+m1 = 12.5; % kg
+m2 = 5.5; % kg
+m_AOJ = 9.8; % kg/m
+m_disc1 = 11.2; % kg
+m_disc2 = 11.2; % kg
+k1 = 3800; % N/m
+c1 = 105; % Ns/m
+k2 = 2150; % N/m
+c2 = 215; % Ns/m
+k3 = 1005; % N/m
+c3 = 185; % Ns/m
+k4 = 1005; % N/m
+c4 = 185; % Ns/m
+
+% Calculate equivalent mass for the AOJ system
+m_equivalent_AOJ = m1 + m2 + m_AOJ * AB^2;
+
+% Calculate natural frequency and damping ratio for the AOJ system
+wn_AOJ = sqrt((k1 + k2) / m_equivalent_AOJ); % Natural frequency
+zeta_AOJ = (c1 + c2) / (2 * sqrt(m_equivalent_AOJ * (k1 + k2))); % Damping ratio
+
+% Calculate period of vibration for the AOJ system
+Ta_AOJ = 2 * pi / wn_AOJ;
+
+% Compute amplitude ratios for n = 1, 2, 3, 4 for the AOJ system
+n_values_AOJ = [1, 2, 3, 4];
+Xn_X0_AOJ = exp(-zeta_AOJ * pi * n_values_AOJ / sqrt(1 - zeta_AOJ^2));
+
+% Generate plot for amplitude ratio versus number of oscillations for the AOJ system
+figure;
+subplot(2, 1, 1);
+plot(n_values_AOJ, Xn_X0_AOJ, 'o-', 'LineWidth', 2);
+xlabel('Number of Oscillations (n)');
+ylabel('Amplitude Ratio (Xn/X0)');
+title('Amplitude Ratio versus Number of Oscillations (AOJ System)');
+
+% Calculate equivalent mass for the disc system
+m_equivalent_disc = m_disc1 + m_disc2;
+
+% Calculate natural frequency and damping ratio for the disc system
+wn_disc = sqrt((k3 + k4) / m_equivalent_disc); % Natural frequency
+zeta_disc = (c3 + c4) / (2 * sqrt(m_equivalent_disc * (k3 + k4))); % Damping ratio
+
+% Calculate period of vibration for the disc system
+Ta_disc = 2 * pi / wn_disc;
+
+% Compute amplitude ratios for n = 1, 2, 3, 4 for the disc system
+n_values_disc = [1, 2, 3, 4];
+Xn_X0_disc = exp(-zeta_disc * pi * n_values_disc / sqrt(1 - zeta_disc^2));
+
+% Generate plot for amplitude ratio versus number of oscillations for the disc system
+subplot(2, 1, 2);
+plot(n_values_disc, Xn_X0_disc, 'o-', 'LineWidth', 2);
+xlabel('Number of Oscillations (n)');
+ylabel('Amplitude Ratio (Xn/X0)');
+title('Amplitude Ratio versus Number of Oscillations (Disc System)');
+
+% Display results for the AOJ system
+fprintf('AOJ System:\n');
+fprintf('Natural Frequency (wn): %.4f rad/s\n', wn_AOJ);
+fprintf('Damping Ratio (zeta): %.4f\n', zeta_AOJ);
+fprintf('Period of Vibration (Ta): %.4f s\n', Ta_AOJ);
+fprintf('Amplitude Ratios (Xn/X0): %s\n', num2str(Xn_X0_AOJ));
+
+% Display results for the disc system
+fprintf('\nDisc System:\n');
+fprintf('Natural Frequency (wn): %.4f rad/s\n', wn_disc);
+fprintf('Damping Ratio (zeta): %.4f\n', zeta_disc);
+fprintf('Period of Vibration (Ta): %.4f s\n', Ta_disc);
+fprintf('Amplitude Ratios (Xn/X0): %s\n', num2str(Xn_X0_disc));
+
+% Given information (use the values provided in the previous responses)
+% ...
+
+% Initialize vectors to store results
+positions = 10:8:90; % Positions along AOJ in percentage
+amplitude_ratios = zeros(length(positions), 4);
+
+% Loop over different positions for sets 3 and 4
+for i = 1:length(positions)
+    % Modify the positions of sets 3 and 4
+    position_set3 = AB * positions(i) / 100;
+    position_set4 = AB * positions(i) / 100;
+
+    % Update the spring and damping constants for sets 3 and 4
+    k3 = 1005; % N/m
+    c3 = 185; % Ns/m
+    k4 = 1005; % N/m
+    c4 = 185; % Ns/m
+
+    % Calculate equivalent mass for the AOJ system
+    m_equivalent_AOJ = m1 + m2 + m_AOJ * AB^2;
+
+    % Calculate natural frequency and damping ratio for the AOJ system
+    wn_AOJ = sqrt((k1 + k2 + k3 + k4) / m_equivalent_AOJ); % Natural frequency
+    zeta_AOJ = (c1 + c2 + c3 + c4) / (2 * sqrt(m_equivalent_AOJ * (k1 + k2 + k3 + k4))); % Damping ratio
+
+    % Compute amplitude ratios for n = 1, 2, 3, 4 for the AOJ system
+    n_values_AOJ = [1, 2, 3, 4];
+    Xn_X0_AOJ = exp(-zeta_AOJ * pi * n_values_AOJ / sqrt(1 - zeta_AOJ^2));
+
+    % Store results
+    amplitude_ratios(i, :) = Xn_X0_AOJ;
+end
+
+% Generate plot for amplitude ratio versus position along AOJ
+figure;
+plot(positions, amplitude_ratios, 'o-', 'LineWidth', 2);
+xlabel('Position along AOJ (%)');
+ylabel('Amplitude Ratio (Xn/X0)');
+legend('n=1', 'n=2', 'n=3', 'n=4');
+title('Effect of Positions for Sets 3 and 4 on Amplitude Ratios');
+
+% Display results
+fprintf('Positions along AOJ: %s\n', num2str(positions));
+fprintf('Amplitude Ratios (Xn/X0):\n');
+disp(amplitude_ratios);
